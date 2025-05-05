@@ -7,7 +7,24 @@ app.use(express.json());
 let client;
 
 venom
-  .create({ session: 'bot', multidevice: true })
+  .create({
+    session: 'bot',
+    multidevice: true,
+    headless: true,
+    puppeteerOptions: {
+      executablePath: '/usr/bin/chromium-browser',
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ]
+    }
+  })
   .then((clientInstance) => {
     client = clientInstance;
 
@@ -29,7 +46,7 @@ venom
       }
     });
 
-    const PORT = process.env.PORT || 3000; // <-- Cambiado a 3000
+    const PORT = process.env.PORT || 3000;
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Servidor activo en el puerto ${PORT}`);
     });
